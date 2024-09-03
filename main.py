@@ -1,4 +1,4 @@
-from utils import start_date, end_date
+from utils import start_date, end_date, years
 from logic import process_stock, process_expenses
 from config import portfolio, initial_investment, year_to_dates
 
@@ -24,7 +24,7 @@ united_return = process_stock(
 
 monte_carlo_return = round(sum([amazon_return, apple_return, visa_return, cat_return, united_return]) - 1000000, 2)  # type: ignore
 print(
-    f"The expected return over a year using monte carlo method is ${monte_carlo_return}"
+    f"The expected return over a year using monte carlo method is ${monte_carlo_return} analyzing data over the past {years} years."
 )
 # Calculate expected returns - could do as loop, just lazy.
 amazon_value = process_expenses(initial_investment, year_to_dates["amazon"], "Amazon")
