@@ -52,6 +52,8 @@ def process_stock(stock_name, ticker, start_date, end_date):
     print(
         f"{stock_name}'s projected percent change from current price to the projected price: {percent_change:.2f}%\n"
     )
+    stock_return = 200000 * (1 + (percent_change / 100))
+    return stock_return
 
 
 def create_exponent():
