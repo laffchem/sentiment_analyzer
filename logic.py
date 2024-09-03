@@ -28,3 +28,26 @@ def normalize_and_simulate(data):
 
     mean_final_price = np.mean(price_paths[-1])
     return mean_final_price
+
+
+def calculate_percent_change(current_price, projected_price):
+    return ((projected_price - current_price) / current_price) * 100
+
+
+def process_stock(stock_name, ticker, start_date, end_date):
+    data = download_data(ticker, start_date, end_date)
+    normalized_price = normalize_and_simulate(data)
+
+    # Get the current price
+    current_data = yf.download(ticker, period="1d")
+    current_price = current_data["Adj Close"].iloc[-1]
+
+    # Calculate percent change
+    percent_change = calculate_percent_change(current_price, normalized_price)
+
+    # Print results
+    print(f"{stock_name}'s projected mean price in one year: ${normalized_price:.2f}")
+    print(f"{stock_name}'s current price: ${current_price:.2f}")
+    print(
+        f"{stock_name}'s projected percent change from current price to the projected price: {percent_change:.2f}%\n"
+    )
