@@ -1,6 +1,7 @@
 import yfinance as yf
 import numpy as np
 import scipy.stats as stats
+from datetime import datetime
 
 
 def download_data(ticker, start_date, end_date):
@@ -15,7 +16,7 @@ def download_data(ticker, start_date, end_date):
 def normalize_and_simulate(data):
     returns = data["Return"]
     mu, std = stats.norm.fit(returns)
-    num_sims = 10000
+    num_sims = 100000
     trading_days = 252
     simulated_returns = np.random.normal(mu, std, (trading_days, num_sims))
     last_price = data["Adj Close"].iloc[-1]
@@ -51,3 +52,25 @@ def process_stock(stock_name, ticker, start_date, end_date):
     print(
         f"{stock_name}'s projected percent change from current price to the projected price: {percent_change:.2f}%\n"
     )
+
+
+def create_exponent():
+    today = datetime.now()
+    beginning_of_year = datetime(today.year, 1, 1)
+    days_from_start = (today - beginning_of_year).days
+    exponent = 365 / days_from_start
+    return exponent
+
+
+def calculate_expected_return(initial_investment, ytd, exponent):
+    estimated_return = (1 + ytd) ** exponent
+    money = initial_investment * estimated_return
+    return money
+
+
+def process_expenses(initial_investment, ytd, stock_name):
+    create_exponent()
+    money_return = calculate_expected_return(initial_investment, ytd, create_exponent())
+    money_return = round(money_return - initial_investment, 2)
+    print(f"{stock_name}'s expected return is ${money_return}")
+    return money_return
